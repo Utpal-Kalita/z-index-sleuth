@@ -1,161 +1,549 @@
 <!DOCTYPE html>
-<html lang="en" data-type="software" data-radius="soft" data-buttons="solid" data-motion="reduced">
+
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="page-type" content="software">
-  <meta name="site-kind" content="software">
-  <title>Z-Index Sleuth - Find the invisible blocker</title>
-  <meta name="description" content="DOM hit-test evidence, Gemini source repair and independent Kane verification.">
-  <link rel="stylesheet" href="style.css">
-</head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Z-Index Sleuth - Blocked-Click Debugging Prototype</title>
+<style>
+        :root {
+            --bg-offwhite: #FBFBFA;
+            --surface-white: #FFFFFF;
+            --border-subtle: #E2E2DF;
+            --border-strong: #1A1A1A;
+            --text-ink: #111111;
+            --text-muted: #555555;
+            --text-light: #777777;
+            --accent-cobalt: #0047FF;
+            --accent-cobalt-light: #EEF2FF;
+            --code-bg: #F4F4F2;
+            --red-tint: #FFF5F5;
+            --red-border: #FFD8D8;
+            --red-text: #C53030;
+            --green-tint: #F0FFF4;
+            --green-border: #C6F6D5;
+            --green-text: #22543D;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-offwhite);
+            color: var(--text-ink);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Preview Banner */
+        .preview-banner {
+            background-color: var(--text-ink);
+            color: var(--bg-offwhite);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-align: center;
+            padding: 8px;
+        }
+
+        /* Container & Grid */
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: -0.01em;
+            text-decoration: none;
+            color: var(--text-ink);
+        }
+
+        nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        nav a {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--text-ink);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 64px 0 80px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-cobalt);
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 17px;
+            color: var(--text-muted);
+            line-height: 1.55;
+            margin-bottom: 32px;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background-color: var(--text-ink);
+            color: var(--surface-white);
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.15s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-cobalt);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-ink);
+            padding: 12px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 4px;
+            border: 1px solid var(--border-subtle);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-ink);
+        }
+
+        /* Product Visual Right */
+        .product-visual {
+            background: var(--surface-white);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.03);
+        }
+
+        .visual-label {
+            font-size: 11px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .canvas-simulation {
+            position: relative;
+            height: 140px;
+            background: var(--code-bg);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed var(--border-subtle);
+        }
+
+        .simulated-btn {
+            background: var(--text-ink);
+            color: white;
+            padding: 10px 18px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 4px;
+            border: none;
+        }
+
+        .simulated-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 71, 255, 0.04);
+            border: 1px solid rgba(0, 71, 255, 0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: flex-start;
+            padding: 8px;
+            pointer-events: auto;
+        }
+
+        .overlay-badge {
+            background: var(--accent-cobalt);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        /* Sections General */
+        section {
+            padding: 64px 0;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .section-header {
+            max-width: 640px;
+            margin-bottom: 40px;
+        }
+
+        .section-number {
+            font-size: 12px;
+            font-weight: 700;
+            font-family: monospace;
+            color: var(--accent-cobalt);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+        }
+
+        .section-desc {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* 4-Step Grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .step-card {
+            background: var(--surface-white);
+            border: 1px solid var(--border-subtle);
+            padding: 24px;
+            border-radius: 6px;
+        }
+
+        .step-index {
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .step-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .step-copy {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Evidence Section */
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .evidence-box {
+            background: var(--surface-white);
+            border: 1px solid var(--border-subtle);
+            padding: 28px;
+            border-radius: 6px;
+        }
+
+        .evidence-box.fail {
+            border-color: var(--red-border);
+            background-color: var(--red-tint);
+        }
+
+        .evidence-box.pass {
+            border-color: var(--green-border);
+            background-color: var(--green-tint);
+        }
+
+        .evidence-status {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .fail .evidence-status { color: var(--red-text); }
+        .pass .evidence-status { color: var(--green-text); }
+
+        .evidence-metric {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: monospace;
+            margin-bottom: 8px;
+        }
+
+        .evidence-meta {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Footer / Scope */
+        .scope-footer {
+            padding: 48px 0;
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 32px;
+        }
+
+        .scope-text {
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .scope-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: right;
+        }
+
+        .scope-links a {
+            color: var(--text-ink);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .scope-links a:hover {
+            color: var(--accent-cobalt);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero, .steps-grid, .evidence-grid, .scope-footer {
+                grid-template-columns: 1fr;
+            }
+            h1 { font-size: 40px; }
+            .scope-links { text-align: left; }
+        }
+    
+        a:focus-visible,button:focus-visible {outline:3px solid #0047ff;outline-offset:4px;}
+        nav a,.scope-links a {min-height:44px;display:inline-flex;align-items:center;}
+        .btn-primary,.btn-secondary{min-height:46px;display:inline-flex;align-items:center;justify-content:center;}
+        .hero{min-height:650px;gap:72px;}h1{font-size:68px;letter-spacing:-3px;font-weight:650;}.hero-subtitle{font-size:18px;line-height:1.7;}
+        .product-visual{padding:30px;border-radius:0;min-height:330px;display:flex;flex-direction:column;justify-content:center;background:#f1f2ed;box-shadow:none;}.canvas-simulation{height:190px;background:#fafaf7;}.visual-label{font-size:9px;letter-spacing:1.5px;}.simulated-overlay{inset:15px 9px 28px 14px;border-style:dashed;transform:translateY(-5px);}.overlay-badge{background:#fff;color:#0047ff;position:absolute;top:-12px;left:12px;}.simulated-btn{font-size:15px;padding:16px 22px;}.product-visual:after{content:'The click reaches the layer. The button never receives it.';font-size:11px;line-height:1.6;color:#555;margin-top:16px;}
+        .section-header{max-width:700px;}.section-title{font-size:36px;line-height:1.18;letter-spacing:-1px;}.section-desc{max-width:610px;font-size:16px;line-height:1.8;}.steps-grid{display:block;border-top:1px solid #deded8;}.step-card{display:grid;grid-template-columns:180px 240px 1fr;gap:25px;border:0;border-bottom:1px solid #deded8;border-radius:0;padding:25px 0;background:transparent;}.step-copy{font-size:14px;line-height:1.7;}.step-index{margin:3px 0;font-size:10px;}.step-title{font-size:17px;margin:0;}.evidence-box{border-radius:0;}.evidence-metric{font-family:inherit;font-size:30px;letter-spacing:-1px;}.scope-footer{background:#f3f3ed;display:block;padding:28px;}.scope-links{display:flex;flex-direction:row;text-align:left;margin-top:16px;gap:24px;}.scope-text{max-width:830px;font-size:12px;line-height:1.9;}.preview-banner{background:#eaece6;color:#555;font-size:9px;}.example-journey{font-size:14px;margin:22px 0 0;padding:16px 0;border-top:1px solid #deded8;border-bottom:1px solid #deded8;color:#555;}
+        @media(max-width:850px){h1{font-size:54px;}.hero{gap:30px;}.step-card{grid-template-columns:140px 170px 1fr;gap:20px;}}
+        @media(max-width:700px){header{align-items:flex-start;padding:20px 0;}nav{gap:8px;flex-wrap:wrap;max-width:170px;justify-content:flex-end;}nav a{font-size:10px;min-height:32px;}.logo{font-size:14px;min-height:32px;display:flex;align-items:center;}.hero{display:grid;grid-template-columns:1fr;min-height:0;padding:44px 0 50px!important;gap:35px;}h1{font-size:48px;letter-spacing:-2px;}.hero-subtitle{font-size:16px;}.eyebrow{font-size:9px;}.hero-cta-group{flex-direction:column;align-items:stretch;}.btn-primary,.btn-secondary{width:100%;}.product-visual{min-height:270px;padding:22px;}.canvas-simulation{height:150px;}.section-title{font-size:29px;}.section-desc{font-size:15px;}.section-header{margin-bottom:25px;}section{padding:45px 0;}.step-card{display:block;padding:24px 0;}.step-index{margin:0 0 8px;}.step-title{margin-bottom:8px;}.evidence-grid{grid-template-columns:1fr;gap:16px;}.evidence-box{padding:24px;}.evidence-metric{font-size:27px;}.scope-footer{padding:22px;}.scope-links{flex-wrap:wrap;}.container{padding:0 22px;}}
+        @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;}}
+        </style>
+<link href="/story-demo.css" rel="stylesheet"/></head>
 <body>
-  <div class="skip-link"><a href="#workspace-main">Skip to main content</a></div>
 
-  <header class="app-header">
-    <div class="brand">
-      <span class="logo-mark" aria-hidden="true">Z</span>
-      <div class="brand-titles">
-        <h1>Z-Index Sleuth</h1>
-        <span class="subtitle">Browser interaction forensics</span>
-      </div>
-    </div>
-    <div class="header-status">
-      <span id="runner-badge" class="badge">Recorded Evidence &middot; Local Runner</span>
-      <button id="btn-reset" class="btn secondary" type="button">Reset Fixture</button>
-      <button id="btn-repair" class="btn primary" type="button">Run Full Repair</button>
-    </div>
-  </header>
+<div class="container">
+<!-- Header -->
+<header>
+<a class="logo" href="#home">Z-Index Sleuth</a>
+<nav>
+<a href="#how-it-works">How it works</a>
+<a href="#evidence">Evidence</a>
+<a href="#demo/1">Try example</a>
+</nav>
+</header><main id="main"><div class="view active" id="home-view"><section class="hero" style="border-bottom: none; padding-top: 48px;">
+<div>
+<div class="eyebrow">Blocked-Click Debugging Prototype</div>
+<h1>Find the layer.<br/>Fix the click.</h1>
+<p class="hero-subtitle">
+                    For frontend developers debugging a button that looks ready but never responds. Z-Index Sleuth pairs DOM evidence, a Gemini source fix, and Kane verification in one worked example.
+                </p>
+<div class="hero-cta-group">
+<a class="btn-primary" href="#demo/1">Try the example</a>
+<a class="btn-secondary" href="https://github.com/Utpal-Kalita/z-index-sleuth" rel="noopener" target="_blank">View source</a>
+</div>
+</div>
+<div class="product-visual">
+<span class="visual-label">THE PROBLEM, ILLUSTRATED</span>
+<div class="canvas-simulation">
+<span aria-hidden="true" class="simulated-btn">Generate Report</span>
+<div class="simulated-overlay">
+<span class="overlay-badge">.loading-overlay (catches click)</span>
+</div>
+</div>
+</div>
+</section><section id="how-it-works">
+<div class="section-header">
+<span class="section-number">01</span>
+<h2 class="section-title">The button is fine. The layer above it isn't.</h2>
+<p class="section-desc">
+                    A loading layer is meant to stop clicks while work is happening. In this example, it becomes invisible but keeps catching clicks. The button looks ready. Clicking it does nothing.
+                </p>
+</div>
+</section><section>
+<div class="section-header">
+<span class="section-number">02</span>
+<h2 class="section-title">A fix is only half the answer.</h2>
+<p class="section-desc">
+                    Finding a likely fix is not enough. The same user action must work afterward, without weakening the test.
+                </p>
+</div>
+<div class="steps-grid">
+<div class="step-card">
+<span class="step-index">01 / Kane Test</span>
+<div class="step-title">Kane catches the failure</div>
+<p class="step-copy">A real browser tries to generate a report with a normal click. Kane records a failure.</p>
+</div>
+<div class="step-card">
+<span class="step-index">02 / DOM Probe</span>
+<div class="step-title">The DOM reveals the blocker</div>
+<p class="step-copy">Five sampled points show that the invisible loading layer, not the button, receives the click.</p>
+</div>
+<div class="step-card">
+<span class="step-index">03 / Gemini Source Fix</span>
+<div class="step-title">Gemini changes the source</div>
+<p class="step-copy">The failure and DOM evidence go to Gemini. Its CSS change lets clicks through while the layer is inactive.</p>
+</div>
+<div class="step-card">
+<span class="step-index">04 / Verification</span>
+<div class="step-title">Kane tests the same goal</div>
+<p class="step-copy">The unchanged normal-click goal passes. A separate check confirms active loading still blocks clicks.</p>
+</div>
+</div>
+</section><section id="evidence">
+<div class="section-header">
+<span class="section-number">03</span>
+<h2 class="section-title">Same button. Same test. Different result.</h2>
+<p class="section-desc">
+                    Recorded on 17 November 2026. The inactive layer stops blocking the button; active loading still prevents clicks as intended.
+                </p>
+</div>
+<div class="evidence-grid">
+<div class="evidence-box fail">
+<span class="evidence-status">Before repair - Kane failed</span>
+<div class="evidence-metric">5 / 5 points blocked</div>
+<p class="evidence-meta">Independent 5-point DOM hit test caught entirely by <code>.loading-overlay</code>. Normal click objective failed.</p>
+</div>
+<div class="evidence-box pass">
+<span class="evidence-status">After source repair - Kane passed</span>
+<div class="evidence-metric">0 / 5 points blocked</div>
+<p class="evidence-meta">Targeted pointer-events rule applied. Hit test passes cleanly; unchanged Kane normal-click objective succeeds.</p>
+</div>
+</div>
+<a class="btn-secondary" data-open-proof="" href="#demo/3">Inspect recorded reports and source change</a></section><section id="example-preview" style="border-bottom: none;">
+<div class="section-header">
+<span class="section-number">04</span>
+<h2 class="section-title">Try the example, or inspect the proof.</h2>
+<p class="section-desc">Try the broken button, reveal its invisible blocker, then try the repaired button. Screenshots, the CSS change and original Kane reports are available below the interactive example.</p>
+</div>
+<div class="example-journey">1. Try the broken button   →   2. See the blocker   →   3. Try the fixed button</div><div class="hero-cta-group" style="margin-top:24px"><a class="btn-primary" href="#demo/1">Try the example</a>
+<a class="btn-secondary" href="/guide.html" rel="noopener">Run it locally</a>
+<a class="btn-secondary" href="https://github.com/Utpal-Kalita/z-index-sleuth" rel="noopener" target="_blank">Inspect the source</a>
+</div>
+</section></div><section class="view" id="demo-view">
+<div class="demo-container">
+<div class="demo-nav">
+<a class="back-link" href="#home">← Back to overview</a>
+<div class="progress-row">
+<span class="step-num active" data-step="1">1</span>
+<span class="step-num" data-step="2">2</span>
+<span class="step-num" data-step="3">3</span>
+</div>
+</div>
+<div class="demo-main">
+<div class="demo-sidebar">
+<div id="step-label">Step 1 of 3</div>
+<h2 id="step-title">Try the broken button</h2>
+<p id="step-description">Click the button below. Notice how the click does nothing because an invisible layer intercepts it.</p>
+<div aria-live="polite" class="feedback" hidden="" id="click-feedback" role="status"></div>
+<div class="step-actions">
+<button class="btn secondary" disabled="" id="prev-step">Previous</button>
+<button class="btn primary" id="next-step">Next step</button>
+</div>
+</div>
+<div class="demo-preview"><div class="preview-label"><span id="preview-label">ORIGINAL CSS</span><span>Interactive reproduction</span></div>
+<iframe height="340" id="demo-frame" src="/viewer-fixture/index.html?mode=original" title="Original CSS interactive reproduction"></iframe>
+</div>
+</div>
+<div class="evidence-wrapper"><details id="evidence-details"><summary>See recorded proof <span>Kane results, source change and screenshots</span></summary><div id="evidence-content"></div></details></div>
+</div>
+</section></main>
+<!-- Hero Section -->
 
-  <main id="workspace-main" class="workspace">
-    <!-- Hero / Intro Banner -->
-    <section class="intro-banner">
-      <div class="intro-content">
-        <h2>Find the invisible blocker.</h2>
-        <p>A button can look ready and still receive no clicks. Find the overlay, fix its source, and make Kane prove the same flow works.</p>
-      </div>
-      <details class="objective-meta"><summary>Unchanged test objective</summary>
-        <div class="meta-row">
-          <span class="label">Objective SHA-256</span>
-          <code id="meta-sha" class="mono">--</code>
-        </div>
-        <div class="meta-row">
-          <span class="label">Immutable Objective</span>
-          <span id="meta-objective" class="objective-text">Using a normal pointer click on the visible Generate Report button, generate a report and verify the text Report generated is visible.</span>
-        </div>
-      </details>
-    </section>
-    <p id="mode-note" class="mode-note"></p><p id="inline-message" role="alert" hidden></p>
+<!-- Section 01 -->
 
-    <!-- Main Split Workspace -->
-    <div class="split-workspace">
-      <!-- Left: Interactive fixture -->
-      <section class="pane preview-pane" aria-label="Fixture Preview Pane">
-        <div class="pane-header">
-          <div class="pane-title-group">
-            <h3>Interactive fixture</h3>
-            <span class="url-tag">Controlled overlay fixture</span>
-          </div>
-          <div class="preview-mode-toggle" role="tablist" aria-label="Preview Mode">
-            <button class="mode-tab active" role="tab" aria-selected="true" data-mode="original" id="tab-mode-orig">Original</button>
-            <button class="mode-tab" role="tab" aria-selected="false" data-mode="repaired" id="tab-mode-rep">Repaired</button>
-            <button class="outline-toggle" id="btn-outline" aria-pressed="false" type="button" title="Toggle Overlay Outlines inside fixture">Overlay Outlines</button>
-          </div>
-        </div>
-        <div class="iframe-container">
-          <iframe id="fixture-frame" src="/fixture/index.html" title="Target Fixture" sandbox="allow-scripts allow-same-origin"></iframe>
-        </div>
-        <div class="workflow-steps" aria-label="Workflow Steps">
-          <span class="step-tag completed">1. Reproduce</span>
-          <span class="step-tag" id="step-diag">2. Diagnose</span>
-          <span class="step-tag" id="step-repair">3. Repair</span>
-          <span class="step-tag" id="step-verify">4. Verify</span>
-        </div>
-      </section>
+<!-- Section 02 -->
 
-      <!-- Right: Recorded DOM probe & Timeline -->
-      <section class="pane inspector-pane" aria-label="Inspector and Timeline">
-        <div class="pane-header">
-          <h3>Recorded DOM probe</h3>
-          <span id="inspector-status-badge" class="badge muted">Not Run</span>
-        </div>
+<!-- Section 03 -->
 
-        <div class="inspector-box" id="inspector-container">
-          <div class="empty-state">
-            <p>Run full repair or load recorded diagnostic evidence to inspect multi-point coordinate hit testing, computed opacity, pointer-events, and stacking context ancestors.</p>
-          </div>
-        </div>
+<!-- Section 04 -->
 
-        <!-- 5-Stage Timeline -->
-        <div class="timeline-card" aria-label="Pipeline Timeline">
-          <h4>Verification trail</h4>
-          <ul id="timeline-list" class="timeline">
-            <li class="stage-item" data-stage="not_run">
-              <span class="dot"></span>
-              <div class="stage-info"><strong>Not Run</strong><span>Awaiting manual trigger or recorded load</span></div>
-            </li>
-            <li class="stage-item" data-stage="baseline_kane">
-              <span class="dot"></span>
-              <div class="stage-info"><strong>Baseline Kane</strong><span>Unchanged acceptance objective</span></div>
-            </li>
-            <li class="stage-item" data-stage="diagnosing">
-              <span class="dot"></span>
-              <div class="stage-info"><strong>Diagnostic Engine</strong><span>5-point hit testing & stacked ancestry</span></div>
-            </li>
-            <li class="stage-item" data-stage="repairing">
-              <span class="dot"></span>
-              <div class="stage-info"><strong>Repair Engine</strong><span>Web-assisted Gemini re-prompt on isolated source</span></div>
-            </li>
-            <li class="stage-item" data-stage="verifying_repair">
-              <span class="dot"></span>
-              <div class="stage-info"><strong>Verification</strong><span>Kane CLI acceptance re-test</span></div>
-            </li>
-          </ul>
-        </div>
-      </section>
-    </div>
-
-    <!-- Bottom Section: Source Diff, Live Logs & Before/After Evidence -->
-    <section class="bottom-pane" aria-label="Evidence and Source Diff">
-      <div class="tabs-container">
-        <div class="tab-headers" role="tablist" aria-label="Evidence Sections">
-          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-diff" id="tab-header-diff" data-tab="tab-diff">Source Diff</button>
-          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-logs" id="tab-header-logs" data-tab="tab-logs">Run events</button>
-          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-evidence" id="tab-header-evidence" data-tab="tab-evidence">Before / After Evidence</button>
-        </div>
-
-        <div id="tab-diff" class="tab-content active" role="tabpanel" tabindex="0" aria-labelledby="tab-header-diff">
-          <pre id="diff-output" class="code-block"><code>// Source diff will appear here after repair execution...</code></pre>
-        </div>
-
-        <div id="tab-logs" class="tab-content" role="tabpanel" tabindex="0" aria-labelledby="tab-header-logs">
-          <pre id="logs-output" class="code-block"><code>[System] Ready. Click 'Run Full Repair' or explore recorded diagnostic run.</code></pre>
-        </div>
-
-        <div id="tab-evidence" class="tab-content" role="tabpanel" tabindex="0" aria-labelledby="tab-header-evidence">
-          <div id="evidence-content" class="evidence-grid">
-            <div class="empty-state">
-              <p>No execution artifacts captured yet.</p>
+<!-- Scope Footer -->
+<footer class="scope-footer">
+<div class="scope-text">
+<strong>What this prototype does - and does not do:</strong> Designed for one controlled overlay scenario via web-assisted repair. Hosted demonstration provides recorded proof and interactive before/after states. Local runner exists; automatic authenticated Gemini CLI repair is unverified, and upstream dependency risks are fully documented.
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="app-footer">
-    <div class="footer-left">
-      <span>Z-Index Sleuth &middot; Local-first debugging</span>
-      <span class="separator">&middot;</span>
-      <a href="/guide.html">Run it locally</a>
-    </div>
-    <div class="footer-right">
-      <span id="footer-runid">Run ID: none</span>
-      <span class="separator">&middot;</span>
-      <a id="download-evidence" href="#" download="zindex-sleuth-evidence.json" class="disabled-link">Download Evidence JSON</a>
-    </div>
-  </footer>
-
-  <script src="app.js"></script>
-</body>
+<div class="scope-links">
+<a href="/guide.html" rel="noopener">Guide →</a>
+<a href="https://github.com/Utpal-Kalita/z-index-sleuth" rel="noopener" target="_blank">Repository →</a>
+<a href="/workspace.html">Technical workspace</a></div>
+</footer>
+</div>
+<script src="/guided.js"></script></body>
 </html>

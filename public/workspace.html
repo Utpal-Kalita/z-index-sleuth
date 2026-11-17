@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-type="software" data-radius="soft" data-buttons="solid" data-motion="reduced">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="page-type" content="software">
+  <meta name="site-kind" content="software">
+  <title>Z-Index Sleuth - Find the invisible blocker</title>
+  <meta name="description" content="DOM hit-test evidence, Gemini source repair and independent Kane verification.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="skip-link"><a href="#workspace-main">Skip to main content</a></div>
+
+  <header class="app-header">
+    <div class="brand">
+      <span class="logo-mark" aria-hidden="true">Z</span>
+      <div class="brand-titles">
+        <h1>Z-Index Sleuth</h1>
+        <span class="subtitle">Browser interaction forensics</span>
+      </div>
+    </div>
+    <div class="header-status">
+      <span id="runner-badge" class="badge">Recorded Evidence &middot; Local Runner</span>
+      <button id="btn-reset" class="btn secondary" type="button">Reset Fixture</button>
+      <button id="btn-repair" class="btn primary" type="button">Run Full Repair</button>
+    </div>
+  </header>
+
+  <main id="workspace-main" class="workspace">
+    <!-- Hero / Intro Banner -->
+    <section class="intro-banner">
+      <div class="intro-content">
+        <h2>Find the invisible blocker.</h2>
+        <p>A button can look ready and still receive no clicks. Find the overlay, fix its source, and make Kane prove the same flow works.</p>
+      </div>
+      <details class="objective-meta"><summary>Unchanged test objective</summary>
+        <div class="meta-row">
+          <span class="label">Objective SHA-256</span>
+          <code id="meta-sha" class="mono">--</code>
+        </div>
+        <div class="meta-row">
+          <span class="label">Immutable Objective</span>
+          <span id="meta-objective" class="objective-text">Using a normal pointer click on the visible Generate Report button, generate a report and verify the text Report generated is visible.</span>
+        </div>
+      </details>
+    </section>
+    <p id="mode-note" class="mode-note"></p><p id="inline-message" role="alert" hidden></p>
+
+    <!-- Main Split Workspace -->
+    <div class="split-workspace">
+      <!-- Left: Interactive fixture -->
+      <section class="pane preview-pane" aria-label="Fixture Preview Pane">
+        <div class="pane-header">
+          <div class="pane-title-group">
+            <h3>Interactive fixture</h3>
+            <span class="url-tag">Controlled overlay fixture</span>
+          </div>
+          <div class="preview-mode-toggle" role="tablist" aria-label="Preview Mode">
+            <button class="mode-tab active" role="tab" aria-selected="true" data-mode="original" id="tab-mode-orig">Original</button>
+            <button class="mode-tab" role="tab" aria-selected="false" data-mode="repaired" id="tab-mode-rep">Repaired</button>
+            <button class="outline-toggle" id="btn-outline" aria-pressed="false" type="button" title="Toggle Overlay Outlines inside fixture">Overlay Outlines</button>
+          </div>
+        </div>
+        <div class="iframe-container">
+          <iframe id="fixture-frame" src="/fixture/index.html" title="Target Fixture" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+        <div class="workflow-steps" aria-label="Workflow Steps">
+          <span class="step-tag completed">1. Reproduce</span>
+          <span class="step-tag" id="step-diag">2. Diagnose</span>
+          <span class="step-tag" id="step-repair">3. Repair</span>
+          <span class="step-tag" id="step-verify">4. Verify</span>
+        </div>
+      </section>
+
+      <!-- Right: Recorded DOM probe & Timeline -->
+      <section class="pane inspector-pane" aria-label="Inspector and Timeline">
+        <div class="pane-header">
+          <h3>Recorded DOM probe</h3>
+          <span id="inspector-status-badge" class="badge muted">Not Run</span>
+        </div>
+
+        <div class="inspector-box" id="inspector-container">
+          <div class="empty-state">
+            <p>Run full repair or load recorded diagnostic evidence to inspect multi-point coordinate hit testing, computed opacity, pointer-events, and stacking context ancestors.</p>
+          </div>
+        </div>
+
+        <!-- 5-Stage Timeline -->
+        <div class="timeline-card" aria-label="Pipeline Timeline">
+          <h4>Verification trail</h4>
+          <ul id="timeline-list" class="timeline">
+            <li class="stage-item" data-stage="not_run">
+              <span class="dot"></span>
+              <div class="stage-info"><strong>Not Run</strong><span>Awaiting manual trigger or recorded load</span></div>
+            </li>
+            <li class="stage-item" data-stage="baseline_kane">
+              <span class="dot"></span>
+              <div class="stage-info"><strong>Baseline Kane</strong><span>Unchanged acceptance objective</span></div>
+            </li>
+            <li class="stage-item" data-stage="diagnosing">
+              <span class="dot"></span>
+              <div class="stage-info"><strong>Diagnostic Engine</strong><span>5-point hit testing & stacked ancestry</span></div>
+            </li>
+            <li class="stage-item" data-stage="repairing">
+              <span class="dot"></span>
+              <div class="stage-info"><strong>Repair Engine</strong><span>Web-assisted Gemini re-prompt on isolated source</span></div>
+            </li>
+            <li class="stage-item" data-stage="verifying_repair">
+              <span class="dot"></span>
+              <div class="stage-info"><strong>Verification</strong><span>Kane CLI acceptance re-test</span></div>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Bottom Section: Source Diff, Live Logs & Before/After Evidence -->
+    <section class="bottom-pane" aria-label="Evidence and Source Diff">
+      <div class="tabs-container">
+        <div class="tab-headers" role="tablist" aria-label="Evidence Sections">
+          <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="tab-diff" id="tab-header-diff" data-tab="tab-diff">Source Diff</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-logs" id="tab-header-logs" data-tab="tab-logs">Run events</button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-evidence" id="tab-header-evidence" data-tab="tab-evidence">Before / After Evidence</button>
+        </div>
+
+        <div id="tab-diff" class="tab-content active" role="tabpanel" tabindex="0" aria-labelledby="tab-header-diff">
+          <pre id="diff-output" class="code-block"><code>// Source diff will appear here after repair execution...</code></pre>
+        </div>
+
+        <div id="tab-logs" class="tab-content" role="tabpanel" tabindex="0" aria-labelledby="tab-header-logs">
+          <pre id="logs-output" class="code-block"><code>[System] Ready. Click 'Run Full Repair' or explore recorded diagnostic run.</code></pre>
+        </div>
+
+        <div id="tab-evidence" class="tab-content" role="tabpanel" tabindex="0" aria-labelledby="tab-header-evidence">
+          <div id="evidence-content" class="evidence-grid">
+            <div class="empty-state">
+              <p>No execution artifacts captured yet.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-left">
+      <span>Z-Index Sleuth &middot; Local-first debugging</span>
+      <span class="separator">&middot;</span>
+      <a href="/guide.html">Run it locally</a>
+    </div>
+    <div class="footer-right">
+      <span id="footer-runid">Run ID: none</span>
+      <span class="separator">&middot;</span>
+      <a id="download-evidence" href="#" download="zindex-sleuth-evidence.json" class="disabled-link">Download Evidence JSON</a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

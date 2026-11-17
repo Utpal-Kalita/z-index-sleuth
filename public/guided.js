@@ -102,14 +102,14 @@ function focusRoute(demoStep) {
 
     const targetSrc = `/viewer-fixture/index.html?mode=${cur.mode}`;
     const iframe = $('demo-frame');
-    if (!iframe.src.endsWith(targetSrc)) iframe.src = targetSrc;
+    if (!iframe.src.endsWith(targetSrc)) { iframe.inert = true; iframe.src = targetSrc; }
     else updateIframeState(iframe);
   }
 
   function updateIframeState(iframe) {
     try {
       const doc = iframe.contentDocument;
-      if (!doc) return;
+      if (!doc || doc.readyState !== 'complete') return;
       iframe.contentWindow.postMessage({ type: 'TOGGLE_OUTLINES', enabled: state.step === 2 }, location.origin);
       if (!doc._bound) {
         doc._bound = true;
@@ -122,6 +122,7 @@ function focusRoute(demoStep) {
           }
         });
       }
+      iframe.inert = false;
     } catch(e) {}
   }
 

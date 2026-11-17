@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Z-Index Sleuth Fixture</title>
+  <link rel="stylesheet" href="fixture.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Dashboard Home</h1>
+    <p>Click below to generate your compliance and performance report.</p>
+    <button id="generate-btn">Generate Report</button>
+    <div id="report-status"></div>
+  </div>
+
+  <div class="loading-overlay" aria-hidden="true">
+    <div class="spinner"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('generate-btn');
+    const statusDiv = document.getElementById('report-status');
+    btn.addEventListener('click', () => {
+      statusDiv.textContent = 'Report generated successfully.';
+      statusDiv.style.color = '#10b981';
+    });
+  </script>
+</body>
+</html>

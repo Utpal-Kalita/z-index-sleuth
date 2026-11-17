@@ -1,0 +1,671 @@
+{
+  "runId": "verified-2026-11-17",
+  "readOnly": true,
+  "repairMode": "Web-assisted Gemini re-prompt",
+  "status": "success",
+  "stage": "complete",
+  "objective": "Using a normal pointer click on the visible Generate Report button, generate a report and verify the text Report generated is visible. Do not use keyboard activation, force clicks, JavaScript clicks, DOM edits or remove overlays.",
+  "objectiveSha256": "0fc0d8196edf174f497cbabe28c92997ff42caa57ed576dcbe7225cc1565c255",
+  "diagnostic": {
+    "targetSelector": "#generate-btn",
+    "box": {
+      "x": 556.390625,
+      "y": 427.9375,
+      "width": 167.1875,
+      "height": 42
+    },
+    "samplePointsTested": 5,
+    "obstructed": true,
+    "summary": "Tested 5 points. Obstructed at 5/5 points. Hit element at center: <DIV class=\"loading-overlay\">",
+    "hitTestResults": [
+      {
+        "point": {
+          "x": 639.984375,
+          "y": 448.9375
+        },
+        "hitElement": {
+          "tagName": "DIV",
+          "className": "loading-overlay",
+          "id": "",
+          "opacity": "0",
+          "pointerEvents": "auto",
+          "zIndex": "9999",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 800
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": true,
+        "ancestors": [
+          {
+            "tagName": "DIV",
+            "className": "loading-overlay",
+            "id": "",
+            "opacity": "0",
+            "pointerEvents": "auto",
+            "zIndex": "9999",
+            "position": "fixed",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": "true"
+          }
+        ]
+      },
+      {
+        "point": {
+          "x": 560.390625,
+          "y": 431.9375
+        },
+        "hitElement": {
+          "tagName": "DIV",
+          "className": "loading-overlay",
+          "id": "",
+          "opacity": "0",
+          "pointerEvents": "auto",
+          "zIndex": "9999",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 800
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": true,
+        "ancestors": [
+          {
+            "tagName": "DIV",
+            "className": "loading-overlay",
+            "id": "",
+            "opacity": "0",
+            "pointerEvents": "auto",
+            "zIndex": "9999",
+            "position": "fixed",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": "true"
+          }
+        ]
+      },
+      {
+        "point": {
+          "x": 719.578125,
+          "y": 431.9375
+        },
+        "hitElement": {
+          "tagName": "DIV",
+          "className": "loading-overlay",
+          "id": "",
+          "opacity": "0",
+          "pointerEvents": "auto",
+          "zIndex": "9999",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 800
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": true,
+        "ancestors": [
+          {
+            "tagName": "DIV",
+            "className": "loading-overlay",
+            "id": "",
+            "opacity": "0",
+            "pointerEvents": "auto",
+            "zIndex": "9999",
+            "position": "fixed",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": "true"
+          }
+        ]
+      },
+      {
+        "point": {
+          "x": 560.390625,
+          "y": 465.9375
+        },
+        "hitElement": {
+          "tagName": "DIV",
+          "className": "loading-overlay",
+          "id": "",
+          "opacity": "0",
+          "pointerEvents": "auto",
+          "zIndex": "9999",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 800
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": true,
+        "ancestors": [
+          {
+            "tagName": "DIV",
+            "className": "loading-overlay",
+            "id": "",
+            "opacity": "0",
+            "pointerEvents": "auto",
+            "zIndex": "9999",
+            "position": "fixed",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": "true"
+          }
+        ]
+      },
+      {
+        "point": {
+          "x": 719.578125,
+          "y": 465.9375
+        },
+        "hitElement": {
+          "tagName": "DIV",
+          "className": "loading-overlay",
+          "id": "",
+          "opacity": "0",
+          "pointerEvents": "auto",
+          "zIndex": "9999",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1280,
+            "height": 800
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": true,
+        "ancestors": [
+          {
+            "tagName": "DIV",
+            "className": "loading-overlay",
+            "id": "",
+            "opacity": "0",
+            "pointerEvents": "auto",
+            "zIndex": "9999",
+            "position": "fixed",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": "true"
+          }
+        ]
+      }
+    ],
+    "crossOriginFrameLimitations": "All elements resolved within the same-origin document context. No cross-origin iframe boundaries encountered."
+  },
+  "afterDiagnostic": {
+    "targetSelector": "#generate-btn",
+    "box": {
+      "x": 556.390625,
+      "y": 427.9375,
+      "width": 167.1875,
+      "height": 42
+    },
+    "samplePointsTested": 5,
+    "obstructed": false,
+    "summary": "Tested 5 points. Obstructed at 0/5 points. Hit element at center: <BUTTON class=\"\">",
+    "hitTestResults": [
+      {
+        "point": {
+          "x": 639.984375,
+          "y": 448.9375
+        },
+        "hitElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "id": "generate-btn",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": false,
+        "ancestors": [
+          {
+            "tagName": "BUTTON",
+            "className": "",
+            "id": "generate-btn",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "static",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          },
+          {
+            "tagName": "DIV",
+            "className": "container",
+            "id": "",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "relative",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          }
+        ]
+      },
+      {
+        "point": {
+          "x": 560.390625,
+          "y": 431.9375
+        },
+        "hitElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "id": "generate-btn",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": false,
+        "ancestors": [
+          {
+            "tagName": "BUTTON",
+            "className": "",
+            "id": "generate-btn",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "static",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          },
+          {
+            "tagName": "DIV",
+            "className": "container",
+            "id": "",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "relative",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          }
+        ]
+      },
+      {
+        "point": {
+          "x": 719.578125,
+          "y": 431.9375
+        },
+        "hitElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "id": "generate-btn",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": false,
+        "ancestors": [
+          {
+            "tagName": "BUTTON",
+            "className": "",
+            "id": "generate-btn",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "static",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          },
+          {
+            "tagName": "DIV",
+            "className": "container",
+            "id": "",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "relative",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          }
+        ]
+      },
+      {
+        "point": {
+          "x": 560.390625,
+          "y": 465.9375
+        },
+        "hitElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "id": "generate-btn",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": false,
+        "ancestors": [
+          {
+            "tagName": "BUTTON",
+            "className": "",
+            "id": "generate-btn",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "static",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          },
+          {
+            "tagName": "DIV",
+            "className": "container",
+            "id": "",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "relative",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          }
+        ]
+      },
+      {
+        "point": {
+          "x": 719.578125,
+          "y": 465.9375
+        },
+        "hitElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "id": "generate-btn",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "targetElement": {
+          "tagName": "BUTTON",
+          "className": "",
+          "opacity": "1",
+          "pointerEvents": "auto",
+          "zIndex": "auto",
+          "rect": {
+            "x": 556.390625,
+            "y": 427.9375,
+            "width": 167.1875,
+            "height": 42
+          }
+        },
+        "obstructed": false,
+        "ancestors": [
+          {
+            "tagName": "BUTTON",
+            "className": "",
+            "id": "generate-btn",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "static",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          },
+          {
+            "tagName": "DIV",
+            "className": "container",
+            "id": "",
+            "opacity": "1",
+            "pointerEvents": "auto",
+            "zIndex": "auto",
+            "position": "relative",
+            "transform": null,
+            "filter": null,
+            "isolation": null,
+            "contain": null,
+            "ariaHidden": null
+          }
+        ]
+      }
+    ],
+    "crossOriginFrameLimitations": "All elements resolved within the same-origin document context. No cross-origin iframe boundaries encountered."
+  },
+  "baselineResult": {
+    "passed": false,
+    "exitCode": 1,
+    "errorType": "assertion_failed",
+    "runEnd": {
+      "status": "failed",
+      "summary": "The automation's click-readiness check incorrectly classified the button as covered. The page loaded normally and the button was visibly available, but the run never made the required normal click.\nReview the coverage/interactability check and its browser or viewport settings. Confirm it tests the button's actual clickable center against real page elements, then rerun using a normal pointer click.",
+      "reason": "The button remains marked covered after waiting, and constraints prohibit clicking through or removing the overlay.",
+      "duration": 30.9,
+      "credits_consumed": 14.3876925,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M7MQWQ8BBZ6HFK2VCQKXSPQR/test-cases/01M7MQWSYGMQYP38MT7VD4WSR4/dashboard/share/US_GB01QFFZPQ9YABUOQCHZBW2MM8Z5HBMNTDLDME5RPCVLOREWCE1BWP0ONNPZ4AH1?type=summary&agentView=true&fqdn=summary-page",
+      "result_code": 750
+    },
+    "stdout": "{\n  \"type\": \"run_end\",\n  \"status\": \"failed\",\n  \"summary\": \"The automation's click-readiness check incorrectly classified the button as covered. The page loaded normally and the button was visibly available, but the run never made the required normal click.\\nReview the coverage/interactability check and its browser or viewport settings. Confirm it tests the button's actual clickable center against real page elements, then rerun using a normal pointer click.\",\n  \"result_code\": 750,\n  \"v\": 1,\n  \"ts\": \"2026-11-17T12:33:00.950Z\"\n}"
+  },
+  "verifyResult": {
+    "passed": true,
+    "exitCode": 0,
+    "errorType": "none",
+    "runEnd": {
+      "status": "passed",
+      "summary": "You asked to generate a report using the visible Generate Report button.\nThe Generate Report button was clicked with a normal pointer click.\nThe report was generated successfully, and the text “Report generated” is visible.",
+      "reason": "Objective completed",
+      "duration": 29.6,
+      "credits_consumed": 13.4053365,
+      "test_url": "https://test-manager.lambdatest.com/projects/01M7MQWQ8BBZ6HFK2VCQKXSPQR/test-cases/01M7MR2PAR2AX8SFECPV32S9CP/dashboard/share/US_BFHPWOGNDZJ9T40QXEEK98PSY38LX61NPQOL4ATJPZF5KS0X36EZST5LC1DLL5RT?type=summary&agentView=true&fqdn=summary-page",
+      "result_code": 100
+    },
+    "stdout": "{\n  \"type\": \"run_end\",\n  \"status\": \"passed\",\n  \"summary\": \"You asked to generate a report using the visible Generate Report button.\\nThe Generate Report button was clicked with a normal pointer click.\\nThe report was generated successfully, and the text “Report generated” is visible.\",\n  \"result_code\": 100,\n  \"v\": 1,\n  \"ts\": \"2026-11-17T12:36:13.010Z\"\n}"
+  },
+  "repairResult": {
+    "success": true,
+    "attempts": 1,
+    "mode": "web-assisted",
+    "explanation": "Gemini received the actual Kane failure, five-point DOM diagnostics and fixture source. It returned a CSS change that makes the inactive overlay pass pointer events through while keeping active loading overlays blocking."
+  },
+  "diff": "diff --git a/baseline/fixture.css b/public/fixture/fixture.css\nindex 630b592..8f83ba1 100644\n--- a/baseline/fixture.css\n+++ b/public/fixture/fixture.css\n@@ -29,7 +29,7 @@ button:hover {\n   background: #2563eb;\n }\n \n-/* BASELINE BUG: aria-hidden loading overlay with opacity:0 and pointer-events:auto */\n+/* FIX: When the loading overlay is aria-hidden (inactive), pointer-events must be none so it does not intercept clicks on the underlying button. When active (aria-hidden=false), pointer-events remains auto to block interaction. */\n .loading-overlay {\n   position: fixed;\n   top: 0;\n@@ -38,13 +38,17 @@ button:hover {\n   height: 100vh;\n   background: rgba(0, 0, 0, 0.5);\n   opacity: 0;\n-  pointer-events: auto; \n+  pointer-events: none; \n   display: flex;\n   justify-content: center;\n   align-items: center;\n   z-index: 9999;\n }\n \n+.loading-overlay[aria-hidden=\"false\"] {\n+  pointer-events: auto;\n+}\n+\n .spinner {\n   border: 4px solid rgba(255, 255, 255, 0.3);\n   width: 40px;\n",
+  "logs": [
+    "Recorded on 17 November 2026. Controlled, deliberately broken fixture.",
+    "Kane baseline: failed, exit 1.",
+    "DOM hit test: all five target sample points intercepted by div.loading-overlay.",
+    "Gemini web re-prompt: actual failure and CSS supplied, source correction returned.",
+    "Gemini correction applied to source CSS. No objective, HTML or assertion change.",
+    "DOM retest: all five target points clear. Active overlay still intercepts.",
+    "Kane unchanged objective: passed, exit 0.",
+    "Important: Kane initially misclassified the invisible obstruction as an automation false positive. DOM evidence establishes the real blocker.",
+    "This is recorded evidence, not a new cloud test."
+  ],
+  "screenshots": {
+    "before": "/evidence/before.png",
+    "after": "/evidence/after.png"
+  },
+  "regression": {
+    "inactivePass": true,
+    "activeOverlayBlocks": true
+  },
+  "limitations": [
+    "One controlled same-origin fixture, not arbitrary website repair.",
+    "The demonstrated repair used a web-assisted Gemini re-prompt. Automatic Gemini CLI repair requires a separate free authenticated Gemini CLI.",
+    "No claim that click-blocker detection is novel. The focus is source repair plus independent unchanged-objective verification."
+  ],
+  "evidenceUrl": "/evidence/recorded-run.json"
+}

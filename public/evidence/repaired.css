@@ -1,0 +1,70 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #121214;
+  color: #f4f4f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  text-align: center;
+  position: relative;
+}
+
+button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
+/* FIX: When the loading overlay is aria-hidden (inactive), pointer-events must be none so it does not intercept clicks on the underlying button. When active (aria-hidden=false), pointer-events remains auto to block interaction. */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loading-overlay[aria-hidden="false"] {
+  pointer-events: auto;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border-left-color: #fff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#report-status {
+  margin-top: 16px;
+  font-size: 14px;
+  font-weight: 600;
+}

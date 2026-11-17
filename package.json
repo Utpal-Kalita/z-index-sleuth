@@ -1,0 +1,23 @@
+{
+  "name": "z-index-sleuth",
+  "version": "1.0.0",
+  "description": "Diagnose blocked clicks, repair overlay CSS and verify the unchanged objective with Kane.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test/*.test.mjs",
+    "preview": "READ_ONLY=1 node server.mjs",
+    "preview:test": "node scripts/preview.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@google/gemini-cli": "^0.68.0",
+    "@testmuai/kane-cli": "^0.10.5",
+    "playwright": "^1.65.1"
+  },
+  "dependencies": {
+    "css-tree": "^3.2.1"
+  }
+}

@@ -1,0 +1,18 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+const root=path.resolve(import.meta.dirname,'..');const dir=path.join(root,'public/evidence');await fs.mkdir(dir,{recursive:true});
+const read=p=>fs.readFile(path.join(root,p),'utf8');
+const beforeEvents=(await read('data/spike/baseline.ndjson')).split('\n').flatMap(l=>{try{return[JSON.parse(l)]}catch{return[]}});
+const afterEvents=(await read('data/spike/after.ndjson')).split('\n').flatMap(l=>{try{return[JSON.parse(l)]}catch{return[]}});
+const before=beforeEvents.findLast(e=>e.type==='run_end'),after=afterEvents.findLast(e=>e.type==='run_end');
+const projectResult=(end,code)=>({passed:code===0&&end.status==='passed',exitCode:code,errorType:code===0?'none':'assertion_failed',runEnd:{status:end.status,summary:end.summary,reason:end.reason,duration:end.duration,credits_consumed:end.credits_consumed,test_url:end.test_url,result_code:end.result_code},stdout:JSON.stringify({type:'run_end',status:end.status,summary:end.summary,result_code:end.result_code,v:end.v,ts:end.ts},null,2)});
+const objective=await read('objective.txt');
+let diff='';try{execFileSync('git',['diff','--no-index','--','baseline/fixture.css','public/fixture/fixture.css'],{cwd:root,encoding:'utf8'})}catch(e){diff=e.stdout||''}
+const state={runId:'verified-2026-11-17',readOnly:true,repairMode:'Web-assisted Gemini re-prompt',status:'success',stage:'complete',objective,objectiveSha256:crypto.createHash('sha256').update(objective).digest('hex'),diagnostic:JSON.parse(await read('data/spike/diagnostic.json')),afterDiagnostic:JSON.parse(await read('data/spike/after-diagnostic.json')),baselineResult:projectResult(before,1),verifyResult:projectResult(after,0),repairResult:{success:true,attempts:1,mode:'web-assisted',explanation:'Gemini received the actual Kane failure, five-point DOM diagnostics and fixture source. It returned a CSS change that makes the inactive overlay pass pointer events through while keeping active loading overlays blocking.'},diff,logs:['Recorded on 17 November 2026. Controlled, deliberately broken fixture.','Kane baseline: failed, exit 1.','DOM hit test: all five target sample points intercepted by div.loading-overlay.','Gemini web re-prompt: actual failure and CSS supplied, source correction returned.','Gemini correction applied to source CSS. No objective, HTML or assertion change.','DOM retest: all five target points clear. Active overlay still intercepts.','Kane unchanged objective: passed, exit 0.','Important: Kane initially misclassified the invisible obstruction as an automation false positive. DOM evidence establishes the real blocker.','This is recorded evidence, not a new cloud test.'],screenshots:{before:'/evidence/before.png',after:'/evidence/after.png'},regression:JSON.parse(await read('data/spike/regression.json')),limitations:['One controlled same-origin fixture, not arbitrary website repair.','The demonstrated repair used a web-assisted Gemini re-prompt. Automatic Gemini CLI repair requires a separate free authenticated Gemini CLI.','No claim that click-blocker detection is novel. The focus is source repair plus independent unchanged-objective verification.'],evidenceUrl:'/evidence/recorded-run.json'};
+await fs.writeFile(path.join(dir,'recorded-run.json'),JSON.stringify(state,null,2));
+for(const n of ['before.png','after.png'])await fs.copyFile(path.join(root,'data/spike',n),path.join(dir,n));
+await fs.copyFile(path.join(root,'baseline/fixture.css'),path.join(dir,'original.css'));
+await fs.copyFile(path.join(root,'public/fixture/fixture.css'),path.join(dir,'repaired.css'));
+console.log('Exported real recorded run; objective SHA256',state.objectiveSha256);

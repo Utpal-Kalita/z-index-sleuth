@@ -1,102 +1,120 @@
 # Z-Index Sleuth
 
-Find the invisible element blocking a button. Repair its CSS source. Make Kane verify the same interaction again.
+Find the invisible layer blocking a button. Repair its CSS. Test the same click again with Kane CLI.
 
-## What is working
+[Try the live example](https://z-index-sleuth.pages.dev/) · [View the source](https://github.com/Utpal-Kalita/z-index-sleuth)
 
-A real controlled fixture has been tested end to end:
+## The problem
 
-1. Kane failed to activate a visible Generate Report button (exit 1).
-2. Five DOM hit tests showed an inactive, transparent `.loading-overlay` receiving the clicks.
-3. Gemini received the actual Kane result, DOM evidence and CSS source through a web-assisted re-prompt.
-4. Gemini returned a real source correction. The inactive overlay passes pointer events through; the active loading state still blocks them.
-5. Kane ran the exact same objective and passed (exit 0). A supplementary browser check confirmed the active-overlay behavior was preserved.
+A button can look clickable while a transparent element above it catches every click. In this example, an inactive loading overlay blocks **Generate Report**.
 
-The recorded run used about 27.8 Kane credits in total. No paid model API was used.
+Z-Index Sleuth brings the failure, DOM evidence, source repair and independent retest together so you can see why the click failed and whether the repair held up.
 
-**This demonstrated loop was web-assisted, not an autonomous Gemini CLI run.** The static website is an interactive recorded-evidence viewer, not a remote repair service. Its guided example lets visitors try the broken button, reveal the blocker, then try the repaired CSS in a separate reproduction iframe. The original technical evidence workspace is also available at `/workspace.html`. The displayed DOM coordinates are from the captured 1280 x 800 probe, not a fresh measurement of your current viewport.
+## What the demo proves
 
-## Run locally
+The recorded example follows one real repair:
 
-Tested on Linux, Node 22 and Google Chrome. Git is needed for source diffs.
+1. **Fail:** Kane CLI cannot complete the normal-click objective.
+2. **Diagnose:** Five DOM hit tests identify the transparent loading overlay intercepting the click.
+3. **Repair:** Gemini receives the actual failure, DOM evidence and CSS through a web-assisted re-prompt and proposes a source correction.
+4. **Retest:** Kane CLI passes the unchanged objective after the repair.
+5. **Check for regression:** An independent browser check confirms that active loading still blocks clicks.
+
+The change lets the inactive overlay pass pointer events through while keeping the active loading state interactive. The objective does not allow force clicks, keyboard activation, JavaScript clicks, DOM edits or removing the overlay.
+
+**This is a demonstrated web-assisted repair, not a verified autonomous Gemini CLI run.** It covers one controlled fixture and one failure category, not arbitrary websites.
+
+## Try it
+
+The [live example](https://z-index-sleuth.pages.dev/) needs no login:
+
+- Try the blocked button.
+- Reveal the invisible layer.
+- Try the repaired version.
+- Inspect the recorded results and CSS change.
+
+The hosted app is an interactive reproduction and recorded-evidence viewer. It does not run repair jobs on a remote server. DOM coordinates shown in the evidence come from the recorded 1280 × 800 probe, not your current browser window.
+
+## Run the recorded viewer locally
+
+Tested with Linux and Node.js 22. Git is needed by the repair runner for source diffs.
 
 ```sh
+git clone https://github.com/Utpal-Kalita/z-index-sleuth.git
+cd z-index-sleuth
 npm ci
 npm test
-npm start
+npm run preview
 ```
 
-Open the localhost address printed by the server. The runner binds to loopback only.
+Open the local address printed in the terminal. Preview mode serves the recorded example without enabling repair or reset endpoints.
 
-Before **Run Full Repair** can execute the automatic path:
+## Local repair prototype
 
-```sh
-npx kane-cli login --oauth
-npx kane-cli whoami
-npx gemini
-```
+The repository also contains a local repair runner. It is separate from the working recorded example and is **not a verified one-click workflow**.
 
-Sign into your own free Gemini Code Assist account in the Gemini CLI, and your own TestMu account with available Kane credits. Complete Gemini's first-run setup in the terminal. Do not put credentials into project files. The application passes no paid API keys or Vertex credentials to Gemini and has no paid-model fallback.
-
-**Automatic Gemini CLI repair has not yet been end-to-end validated in this build environment because an agent-owned free Google login is unavailable.** Missing authentication stops the run without applying a hardcoded patch. It must not be represented as demonstrated one-click automation.
-
-Each local run restores the intentionally broken fixture from `baseline/fixture.css`, then runs the acceptance flow. This project currently supports that one fixture and one failure category, not arbitrary websites. The reset and run endpoints are locked during active runs and disabled in read-only mode.
-
-To view only the recorded run locally:
-
-```sh
-READ_ONLY=1 npm start
-```
-
-## Acceptance objective
-
-The same bytes are read from `objective.txt` before and after source repair. The UI shows their SHA-256 hash. The objective requires a normal pointer click and visible report output. Keyboard activation, force clicks, JavaScript clicks, DOM edits and overlay removal are forbidden.
-
-Kane success requires **exit 0 AND exactly one supported `run_end` event with status `passed`**. An empty stream, unsupported schema, setup error, timeout, contradictory status or missing completion event cannot become a pass. A failed run does not by itself prove a product defect: DOM evidence establishes the obstruction here.
-
-Kane's initial prose incorrectly called the invisible overlay an automation false positive. The raw report is preserved as evidence, but that root-cause interpretation is not endorsed. The DOM hit tests independently establish the blocker.
-
-## Architecture
+Its intended flow is:
 
 ```text
-Local Node runner
-  -> Kane CLI baseline (independent acceptance)
-  -> Playwright DOM probe (five points and stacking ancestors)
-  -> Gemini CLI proposal (source + actual failure + diagnostics)
-  -> CSS AST guard (only overlay-rule changes allowed)
-  -> browser regression guard (normal click + active overlay)
-  -> Kane CLI unchanged-objective retest
-  -> local run artifacts
-
-Static evidence viewer
-  -> sanitized recorded JSON + screenshots + source diff
-  -> interactive Original/Repaired CSS reproduction
+Kane baseline → DOM diagnosis → Gemini CSS proposal
+             → CSS checks → browser checks → unchanged Kane retest
 ```
 
-Gemini CLI receives an isolated temporary workspace and a deny-all-tools policy. It proposes CSS as JSON. The parent process validates the proposal and writes only the fixed fixture CSS. There is no deterministic repair fallback. Only `.loading-overlay` rules and its `aria-hidden` variants may change. Changes outside those rules, malformed CSS and external resources are rejected. The objective, HTML, diagnostics and acceptance code are not handed over for editing.
+The runner binds to loopback and supports only the bundled fixture. It restores the broken baseline at the start of each run and rejects overlapping reset or run requests.
+
+### Authentication status
+
+The published runner was built around Gemini CLI's former individual Code Assist sign-in. That authentication path has since been retired. The older instruction to sign into a free individual account is not a working setup route for this version.
+
+See Google's [Code Assist individuals deprecation notice](https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals). A supported replacement authentication path and a complete authenticated repair run still need validation. No paid-model fallback is configured. Do not assume that launching the server makes automatic repair available.
+
+Kane execution also requires your own TestMu account and available credits. Never add credentials or raw private run artifacts to the repository.
+
+## How verification works
+
+`objective.txt` supplies the same objective bytes before and after repair. Their SHA-256 hash is recorded with the evidence.
+
+A Kane pass requires both:
+
+- Process exit code `0`.
+- Exactly one supported `run_end` event with status `passed`.
+
+Missing, unsupported or contradictory completion data, setup errors and timeouts do not count as passes. A failed automation run alone does not establish a product defect. In the recorded example, DOM hit testing independently establishes the obstruction. Kane's initial prose called it an automation false positive; that interpretation is not treated as the root cause.
+
+The proposed repair is also checked before acceptance:
+
+- Only `.loading-overlay` rules and their `aria-hidden` variants may change.
+- CSS must parse and must not introduce external resources.
+- A normal click must work after repair.
+- Active loading must still block clicks.
+
+The model proposes CSS as JSON in an isolated workspace with tool use denied. The runner validates the proposal and writes the permitted CSS. There is no hardcoded repair fallback.
 
 ## Evidence and tests
 
-- `public/evidence/recorded-run.json`: sanitized actual run results, objective hash, DOM probes, diff and limitations.
-- `public/evidence/original.css` and `repaired.css`: source states used in the reproduction.
-- `data/`: local/private run artifacts, excluded from Git.
-- `npm test`: parser fail-closed cases, CSS scope/validation, response parsing and local server restrictions.
-- `npm run preview:test`: real Chromium viewport checks and interactive reproduction checks.
+| Path or command | Contents |
+| --- | --- |
+| `public/evidence/recorded-run.json` | Sanitized results, objective hash, DOM probes, source diff and limitations |
+| `public/evidence/original.css` | Original blocked-click CSS |
+| `public/evidence/repaired.css` | Repaired CSS used by the example |
+| `public/evidence/before.png`, `after.png` | Recorded screenshots |
+| `objective.txt` | Unchanged acceptance objective |
+| `npm test` | Result parsing, CSS validation, response parsing and server restriction tests |
+| `npm run preview:test` | Chromium layout and interactive reproduction checks |
 
-The preserved Kane evidence packages contain original screenshots and logs, but are not automatically published. Review their contents before sharing them.
+Private local artifacts under `data/` are excluded from Git. Review and sanitize any new evidence before publishing it.
 
-## Scope and originality
+## Scope and safety
 
-This is a controlled overlay-repair proof, not a universal CSS debugger. Click-blocker detection already exists in tools such as css-lab-mcp. The focus here is the explicit failure-to-source-repair-to-independent-retest loop, including evidence of what the verifier got wrong.
+This is a focused prototype, not a universal CSS debugger or a production execution service. Click-blocker detection exists in other tools; this project's focus is making the failure-to-repair-to-independent-retest chain inspectable.
 
-## Build provenance
+The local runner has known upstream dependency advisories, including high-severity transitive findings. Read [DEPENDENCY-SECURITY.md](DEPENDENCY-SECURITY.md) before running it. The static viewer has no runtime npm dependencies. Do not expose the runner to the internet or extend it to untrusted targets and evidence without fixing and testing those paths.
 
-Gemini generated the first implementation and frontend direction with the public Taste skill supplied. That code was reviewed and hardened: a deterministic fallback repair, permissive success parser, UI state mismatches and an iframe layout bug were removed. The demonstrated CSS repair was also generated by Gemini from the actual failure evidence. The original technical workspace remains available. The revised landing page and guided example were planned and generated with Gemini, then assembled and corrected for factual accuracy, strict routing, responsive layout and accessibility. The landing explains the audience, problem, repair process, evidence and limits before the demo. Human review informed the visual direction. The redesign preserves the original fixture and recorded evidence unchanged.
+## Built with
 
-## Dependency note
+- **Gemini:** implementation, design work and the demonstrated source repair, followed by review and corrections.
+- **Kane CLI:** before-and-after acceptance checks against the same objective.
+- **Playwright:** independent DOM probes, regression checks and viewer checks.
+- **Node.js and css-tree:** local execution and scoped CSS validation.
 
-The installed upstream Kane CLI dependency tree currently reports npm audit findings, including high-severity transitive advisories. See [the dependency security review](DEPENDENCY-SECURITY.md) for the actual affected paths and why the suggested forced downgrade was not applied. This source is a bounded prototype, not production-security-ready. The runner is local-only, accepts no arbitrary targets or uploaded evidence, and is not deployed as a public execution service. The static viewer has no runtime npm dependencies. Do not expose the local runner to the internet or extend it to untrusted targets, evidence packs, PDFs or images without fixing and testing those paths.
-
-## Hackathon status
-
-Built in a new repository initialized on 17 November 2026. Public posts, demo video and final submission require separate review and are not implied by this README. See `resources.md` for official rules and tool documentation.
+Built for the Kane CLI Hackathon in November 2026. See [resources.md](resources.md) for event and tool links.
